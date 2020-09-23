@@ -44,7 +44,7 @@ public class Fase3M4 {
 		HashMap<String, Float> menuPrice = new HashMap<String, Float>();    //Declaro HashMap menu-precio
 		
 		List<String> order = new ArrayList<String>();		//Declaro lista pedido
-		int continueOrder = 1;
+		
 		
 		for (int i = 0; i<numDish; i++) {							
 		
@@ -70,7 +70,7 @@ public class Fase3M4 {
 				}
 			}
 			
-			while (true) {		//Relleno array priceDish pasando por control excepción (check número + entrada decimales)
+			while (true) {	//Relleno array priceDish pasando por control excepción (check número + entrada decimales)
 				try	{
 					System.out.println("Introdueix el preu del plat: ");
 					priceDish[i]= entrada3.nextFloat();	
@@ -86,13 +86,14 @@ public class Fase3M4 {
 			
 			menuPrice.put(menu[i],priceDish[i]);  //Introduzco en HashMap
 		}		
-		
-		
-		for (String i : menuPrice.keySet()) {		//Printo HashMap menu-precio
+				
+		for (String i : menuPrice.keySet()) {	   //Printo HashMap menu-precio
+			
 		      System.out.println(i + " Preu:" + menuPrice.get(i) + "€"); 
 		}
 		
-		
+		int continueOrder = 1;
+				
 		while (continueOrder == 1) {		//Condicion para seguir pidiendo, inicializada en 1.
 			
 			Scanner entrada2 = new Scanner(System.in);
@@ -100,12 +101,16 @@ public class Fase3M4 {
 			System.out.println("Demana el plat que vulguis: ");
 			order.add(entrada2.nextLine());
 			
+			//int control = 1; 
+			
 			while (true) {			//Pregunto si quiere seguir pidiendo + control excepción (check que entrada sea 0 o 1)
 				try	{
+					
 					System.out.println("Vols seguir demanant? 1 = si / 0 = no ");
 					continueOrder = entrada3.nextInt();	
 					entrada3.nextLine();
-					break;
+					continueOrder = wrongContinue (continueOrder);  //Método para revisar que número sea 1 o 0;
+					break;					
 				}
 				catch (InputMismatchException e) {
 					System.err.println("Error! Torna-ho a provar siusplau (Introdueix 1 = si / 0 = no) ");
@@ -114,6 +119,7 @@ public class Fase3M4 {
 				}
 			}
 		}		
+		
 		System.out.println("Has demanat: " + order);
 			
 		//comparo lista order con array menu para obtener el precio total de la factura
@@ -130,8 +136,12 @@ public class Fase3M4 {
 		//Paso array "menu" a lista, para obtener los elementos que no están en el menú.
 		List<String> menuList = Arrays.asList(menu); 
 		order.removeAll(menuList);
-        System.out.println("Aquests plats no están al menú: " + order);
-        
+		boolean extra = order.isEmpty();
+		
+		if (extra != true) {
+			System.out.println("Aquests plats no están al menú: " + order);
+		}
+		
 		System.out.println("El preu total de la factura és de: " + priceTot + "€");
 			
 		//Como pagar
@@ -165,4 +175,14 @@ public class Fase3M4 {
 			System.out.println("Haurás de pagar un o més billets de " + b500+ "€");
 		}
 	}	
+	
+	public static int wrongContinue(int num) {
+		Scanner entrada = new Scanner(System.in);
+		while (num > 1) {
+			System.out.println("Número massa alt! Recorda: 1 = si / 0 = no");
+			num = entrada.nextInt();	
+			entrada.nextLine();
+		}
+		return num;
+	}
 }
